@@ -1,0 +1,6 @@
+[
+  {"name": "State Bank of India", "short_code": "SBI", "upi_suffix": "@oksbi"},
+  {"name": "HDFC Bank", "short_code": "HDFC", "upi_suffix": "@hdfcbank"},
+  {"name": "ICICI Bank", "short_code": "ICICI", "upi_suffix": "@icici"},
+  {"name": "Axis Bank", "short_code": "AXIS", "upi_suffix": "@axisbank"}
+]

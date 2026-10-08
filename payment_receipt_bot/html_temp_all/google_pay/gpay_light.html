@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Google Pay – Transaction Receipt</title>
+<style>
+  /* Google Sans (local on many Google/Android devices; Product Sans fallback for web) */
+  @font-face {
+    font-family: 'Google Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Google Sans'), local('Google Sans Regular'), local('GoogleSans-Regular'),
+         url('https://fonts.cdnfonts.com/s/14955/ProductSans-Regular.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'Google Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Google Sans Medium'), local('GoogleSans-Medium'),
+         url('https://fonts.cdnfonts.com/s/14955/ProductSans-Medium.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'Google Sans';
+    font-style: normal;
+    font-weight: 700;
+    src: local('Google Sans Bold'), local('GoogleSans-Bold'),
+         url('https://fonts.cdnfonts.com/s/14955/ProductSans-Bold.woff') format('woff');
+  }
+
+  /* ---- base / typography ---- */
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #ffffff;
+  }
+  body {
+    font-family: 'Google Sans', 'Google Sans Text', 'Segoe UI', Arial, sans-serif;
+    font-weight: 400;
+    color: #3c4043;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  .page {
+    max-width: 412px;
+    height: 100vh;
+    height: 100dvh;
+    margin: 0 auto;
+    padding: 16px 24px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* ---- profile avatar ---- */
+  .avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    margin: 4px auto 0;
+    overflow: hidden;
+    background: #f1f3f4;
+    display: block;
+    flex-shrink: 0;
+    line-height: 0;
+    contain: paint;
+  }
+  .avatar #avatars {
+    width: 100%;
+    height: 100%;
+  }
+  .avatar img,
+  .avatar .avatar_img {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    border: 0;
+  }
+
+  /* ---- payee header ---- */
+  .to-line {
+    margin-top: 14px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #202124;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+  }
+  .phone {
+    margin-top: 2px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #5f6368;
+    line-height: 1.4;
+  }
+
+  /* ---- amount ---- */
+  .amount-row {
+    margin-top: 16px;
+    font-family: 'Google Sans', 'Google Sans Display', 'Google Sans Text', Arial, sans-serif;
+    font-size: 56px;
+    font-weight: 400;
+    line-height: 1;
+    color: #202124;
+    letter-spacing: -0.5px;
+    white-space: nowrap;
+  }
+  .rupee {
+    font-weight: 400;
+    font-size: 0.78em;
+    vertical-align: 0.06em;
+  }
+
+  /* ---- note pill ---- */
+  .note {
+    display: none;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #e8f0fe;
+    color: #3c4043;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.25;
+    border-radius: 24px;
+  }
+
+  /* ---- status line ---- */
+  .status {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #3c4043;
+    line-height: 1.4;
+  }
+  .status .check { width: 20px; height: 20px; flex: 0 0 auto; }
+
+  /* ---- detail card ---- */
+  .card {
+    margin-top: 28px;
+    border: 1px solid #dadce0;
+    border-radius: 12px;
+    background: #ffffff;
+    text-align: left;
+    overflow: hidden;
+  }
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+  .bank-logo {
+    width: 44px; height: 44px;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    background: #ffffff;
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 auto;
+    overflow: hidden;
+  }
+  .bank-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transform-origin: center center;
+  }
+  .bank-meta { flex: 1 1 auto; min-width: 0; }
+  .bank-name { font-size: 16px; font-weight: 500; color: #202124; line-height: 1.35; }
+  .bank-acct { font-size: 16px; font-weight: 400; color: #3c4043; line-height: 1.35; }
+  .chevron { width: 22px; height: 22px; flex: 0 0 auto; color: #5f6368; }
+
+  .divider { height: 1px; background: #e8eaed; }
+
+  .card-body { padding: 14px 16px 16px; }
+  .field { margin-bottom: 14px; }
+  .field:last-child { margin-bottom: 0; }
+  .label { font-size: 16px; font-weight: 400; color: #3c4043; line-height: 1.35; }
+  .value { font-size: 16px; font-weight: 400; color: #3c4043; line-height: 1.35; margin-top: 1px; word-break: break-word; }
+  .field-id .label { color: #5f6368; }
+  .field-id .value { color: #202124; }
+
+  /* ---- powered by UPI ---- */
+  .powered {
+    margin-top: auto;
+    padding-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .powered img { height: 20px; width: auto; display: block; }
+
+  /* ---- google pay logo ---- */
+  .gpay {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .gpay svg { width: 30px; height: 30px; display: block; }
+  .gpay .pay {
+    font-family: 'Google Sans', 'Google Sans Text', Arial, sans-serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: #5f6368;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+</style>
+</head>
+<body>
+
+  <div class="page">
+
+    <!-- profile photo -->
+    <div class="avatar" aria-label="Profile photo">
+      <div id="avatars">
+        <img
+          class="avatar_img"
+          src="https://api.dicebear.com/10.x/initials/svg?seed=VK&amp;backgroundColor=8526b5&amp;radius=50"
+          alt="Profile photo"
+          width="96"
+          height="96"
+        />
+      </div>
+    </div>
+
+    <!-- payee header -->
+    <div class="to-line">To <span class="receiver_name">ARBIND KUMAR</span></div>
+    <div class="phone">+91 87098 08668</div>
+
+    <!-- amount -->
+    <div class="amount-row"><span class="rupee">₹</span><span class="amount">25,000.00</span></div>
+
+    <!-- note -->
+    <div class="note">For construction</div>
+
+    <!-- status -->
+    <div class="status">
+      <svg class="check" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="12" cy="12" r="12" fill="#188038"/>
+        <path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Completed&nbsp;•&nbsp;<span class="datetime_formatted">Sep 23, 4:30 PM</span></span>
+    </div>
+
+    <!-- detail card -->
+    <div class="card">
+      <div class="card-head">
+        <!-- LOGO 1 : UCO Bank -->
+        <div class="bank-logo" aria-label="UCO Bank logo">
+          <img src="../Bank logo/UCO Bank Logo.jpg" alt="UCO Bank" />
+        </div>
+        <div class="bank-meta">
+          <div class="bank-name"><span class="receiver_bank">UCO Bank</span></div>
+          <div class="bank-acct">XXXXXXXXXX6850</div>
+        </div>
+        <svg class="chevron" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="card-body">
+        <div class="field field-id">
+          <div class="label">UPI transaction ID</div>
+          <div class="value"><span class="utr">126619733470</span></div>
+        </div>
+        <div class="field">
+          <div class="label">To: PRITI KUMARI</div>
+          <div class="value"><span class="receiver_upi">arbbgp@oksbi</span></div>
+        </div>
+        <div class="field">
+          <div class="label">From: <span class="payer_name">DHIRAJ KUMAR KESHRI</span> (<span class="from_bank">UCO Bank</span>)</div>
+          <div class="value"><span class="payer_upi">dkkbgp12@okaxis</span></div>
+        </div>
+        <div class="field field-id">
+          <div class="label">Google transaction ID</div>
+          <div class="value"><span class="google_txn_id">CICAgODq2qxK</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LOGO 3 : Powered by UPI -->
+    <div class="powered">
+      <img src="../upi_logo/upi-logo.png" alt="Powered by UPI" />
+    </div>
+
+    <!-- LOGO 2 : Google Pay -->
+    <div class="gpay">
+      <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" aria-label="Google logo">
+        <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+        <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+        <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+        <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      <span class="pay">Pay</span>
+    </div>
+
+  </div>
+</body>
+</html>

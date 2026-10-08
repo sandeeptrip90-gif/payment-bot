@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>Payment successful</title>
+<style>
+  @font-face {
+    font-family: 'Google Sans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Google Sans'), local('Google Sans Regular'), local('GoogleSans-Regular'),
+         url('https://fonts.cdnfonts.com/s/14955/ProductSans-Regular.woff') format('woff');
+  }
+  @font-face {
+    font-family: 'Google Sans';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Google Sans Medium'), local('GoogleSans-Medium'),
+         url('https://fonts.cdnfonts.com/s/14955/ProductSans-Medium.woff') format('woff');
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background: #1f1f1f;
+  }
+
+  body {
+    font-family: 'Google Sans', 'Google Sans Text', 'Segoe UI', Arial, sans-serif;
+    font-weight: 400;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Layout tuned to ref 736×1341 (download (1).jpg) */
+  .page {
+    width: 100%;
+    max-width: 368px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding: 0 20px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+
+  .success-icon {
+    width: 100px;
+    height: 100px;
+    margin-top: 23.2vh;
+    flex: 0 0 auto;
+  }
+  .success-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .amount {
+    margin-top: 52px;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    color: #e8e8e8;
+    white-space: nowrap;
+  }
+
+  .paid-line {
+    margin: 26px 0 0;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1.35;
+    color: #ffffff;
+  }
+
+  .receiver_upi {
+    margin: 8px 0 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #bbbbbb;
+    word-break: break-all;
+  }
+
+  .meta-block {
+    margin-top: auto;
+    width: 100%;
+    padding-top: 48px;
+    padding-bottom: 8vh;
+  }
+
+  .datetime_formatted {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #bbbbbb;
+  }
+
+  .utr-line {
+    margin: 8px 0 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: #bbbbbb;
+  }
+
+ 
+</style>
+</head>
+<body>
+<main class="page">
+<!-- Success mark (graphic only — not a bank / UPI / GPay logo) -->
+<div aria-hidden="true" class="success-icon">
+<svg viewbox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+<circle cx="48" cy="48" fill="#1973ed" r="48"></circle>
+<path d="M27 48.5 41.5 63 69 33.5" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round" stroke-width="5.5"></path>
+</svg>
+</div>
+<div class="amount">₹23,000.00</div>
+<p class="paid-line">Paid to <span class="receiver_name">Jyoti O Patil</span></p>
+<p class="receiver_upi">jyotiopatil7608@ibl</p>
+<div class="meta-block">
+<p class="datetime_formatted">June 03, 2026 11:56 AM</p>
+<p class="utr-line">UPI transaction ID: <span class="utr">351973086119</span></p>
+</div>
+</main>
+</body>
+</html>

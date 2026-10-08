@@ -1,0 +1,23 @@
+{
+  "telegram_token": "8945401702:AAHpqmG0t1NX8TW-0xcUjTQTM0BLPz_zMhU",
+  "admin_user_id": 5599766250,
+  "sending_mode": "batch",
+  "delay_between_receipts": 4,
+  "amount_min": 1050,
+  "amount_max": 2075,
+  "amount_rounding": "thousands",
+  "receiver_mode": "custom",
+  "payer_mode": "random",
+  "custom_receiver_name": "Sk Mijanur Rahaman",
+  "receiver_upi_mode": "custom",
+  "custom_receiver_upi": "BHARATPE2P0T0H6F8J69310@unitype",
+  "custom_payer_name": "",
+  "custom_amount": 1050,
+  "utr_mode": "random",
+  "custom_utr": "",
+  "datetime_mode": "random",
+  "custom_datetime": "",
+  "data_realism_level": 3,
+  "banks_to_include": "all",
+  "last_modified": "2026-09-23T14:43:43.262601"
+}
