@@ -489,7 +489,7 @@ class PaymentReceiptBot:
         mode = self.config.get("sending_mode", "batch")
         await context.bot.send_message(
             chat_id=chat_id,
-            text=f"Starting in {mode} mode. Delay: {self.config.get('delay_between_receipts', 4)}s",
+            text=f"Start joining {mode} Blue Coys. New users: {self.config.get('delay_between_receipts', 4)}s",
         )
         if mode == "continuous":
             self.send_task = asyncio.create_task(self._continuous_loop(chat_id, context))
@@ -515,7 +515,7 @@ class PaymentReceiptBot:
                     text=f"Could not send {html_file.name}: {e}",
                 )
         self.is_running = False
-        await context.bot.send_message(chat_id=chat_id, text="Batch sending completed")
+        await context.bot.send_message(chat_id=chat_id, text="Join Blue Coys")
 
     async def _continuous_loop(self, chat_id: int, context: ContextTypes.DEFAULT_TYPE):
         html_files = list(TEMPLATES_DIR.rglob("*.html"))
