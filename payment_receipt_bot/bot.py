@@ -4,8 +4,11 @@ Main entry point
 """
 import asyncio
 import logging
+import os
 import random
 import sys
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import List, Dict, Any
 
@@ -33,6 +36,33 @@ logging.basicConfig(
     level=logging.INFO,
 )
 logger = logging.getLogger(__name__)
+
+
+class _HealthHandler(BaseHTTPRequestHandler):
+    """Minimal Render health endpoint for Web Service deployments."""
+
+    def do_GET(self):
+        if self.path not in ("/", "/health"):
+            self.send_response(404)
+            self.end_headers()
+            return
+        body = b"ok"
+        self.send_response(200)
+        self.send_header("Content-Type", "text/plain; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, format, *args):
+        return
+
+
+def _start_health_server() -> ThreadingHTTPServer:
+    port = int(os.environ.get("PORT", "8080"))
+    server = ThreadingHTTPServer(("0.0.0.0", port), _HealthHandler)
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    logger.info("Health server listening on port %s", port)
+    return server
 
 
 _MODIFIER_KEYS = ("phonepe", "gpay", "google", "slice", "supermoney",
@@ -589,6 +619,7 @@ class PaymentReceiptBot:
 
     def run(self) -> None:
         logger.info("Starting bot...")
+        _start_health_server()
         try:
             self.application.run_polling(allowed_updates=Update.ALL_TYPES)
         finally:
